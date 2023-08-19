@@ -15,10 +15,36 @@ time_clip = 65
 background_color = [220, 220, 220]
 max_line_length = 26
 
+def background_txt_color():
+    # Define an array of RGB color values
+    colors = [
+        (255, 0, 0),    # Red
+        (0, 255, 0),    # Green
+        (0, 0, 255),    # Blue
+        (255, 255, 0),  # Yellow
+        (255, 0, 255),  # Magenta
+        (0, 255, 255),  # Cyan
+        (128, 0, 128),  # Purple
+        (255, 165, 0),  # Orange
+        (0, 128, 0),    # Dark Green
+        (128, 128, 128) # Gray
+    ]
+
+    # Choose a random RGB color
+    random_color = random.choice(colors)
+    return (random_color)
+
+
 # Define a custom blur function (box blur)
 def blur(image):
-    """ Returns a blurred (radius=2 pixels) version of the image """
-    return scipy.ndimage.gaussian_filter(image.astype(float), sigma=2)
+    """ Returns a blurred (radius=2 pixels) version of the image with preserved color """
+    blurred_red = scipy.ndimage.gaussian_filter(image[:, :, 0].astype(float), sigma=2)
+    blurred_green = scipy.ndimage.gaussian_filter(image[:, :, 1].astype(float), sigma=2)
+    blurred_blue = scipy.ndimage.gaussian_filter(image[:, :, 2].astype(float), sigma=2)
+    
+    blurred_image = np.stack((blurred_red, blurred_green, blurred_blue), axis=-1)
+    
+    return blurred_image
 
 
 # Create a function to generate the frame
@@ -27,9 +53,14 @@ def make_frame(t):
     return frame
 
 def Template(path, path2, comment):
+    background_txt_color = background_txt_color()
+    # create list with all video data
+    data_info = []
+    
     # create directory to store video
     new_directory, file_extension = os.path.splitext(path)
     filename = os.path.basename(path)
+    basename, basename_extension = os.path.splitext(filename)
 
     if not os.path.exists(new_directory):
         os.mkdir(new_directory)
@@ -79,8 +110,8 @@ def Template(path, path2, comment):
         # Create a list of TextClip objects for each line
         txt_clip = TextClip(
             txt=f"Part {part_index + 1} - {comment}",
-            fontsize = 42,
-            font= 'Amiri-Bold',
+            fontsize = 64,
+            font= 'Roboto-Bold',
             color = 'black'
             )
         txt_clip = txt_clip.set_position('center')
@@ -89,7 +120,7 @@ def Template(path, path2, comment):
         
         color_clip = ColorClip(
                         size=(int(image_width*1.1), int(image_height*1.4)),
-                        color=(0, 255, 255)
+                        color=background_txt_color
                     )
         color_clip = color_clip#.set_opacity(.5)
         
@@ -123,6 +154,8 @@ def Template(path, path2, comment):
         output_file_path = os.path.join(new_folder_path, f"part_{part_index + 1}_"+ filename)
         video_with_frame.write_videofile(output_file_path, codec="libx265", fps=original_video.fps)
 
+        # add data to data_info
+        data_info.append(f"part {part_index + 1} {basename} | {output_file_path}" )
     # Close the original video clip
     original_video.close()
     cropped_video.close()
@@ -132,6 +165,13 @@ def Template(path, path2, comment):
         # Remove the file
         os.remove("tiktok_frame.mp4")
 
+    # Open the file for writing
+    data_path = os.path.join(new_folder_path, basename + ".txt")
+    with open(data_path, "w") as file:
+        # Write each text element from the list to the file
+        for item in data_info:
+            file.write(item + "\n")
+    
 #for i in range(1, len(sys.argv)):
 Template(sys.argv[1], sys.argv[2], sys.argv[3])
 #    i += 1

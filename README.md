@@ -15,5 +15,5 @@ python3 ytb_download.py $LINK
 ## Create the template and cut in part
 python3 Template.py $Principal_video $Second_video $Comment 
 
-# docs
-- 
+## Upload video to tiktok
+- https://pypi.org/project/tiktok-uploader/
