@@ -22,7 +22,16 @@ def send_keys(element, data):
         element.send_keys(i)
         time.sleep(random.uniform(0.1, 0.4))
         
-
+def send_hashtag(element, data):
+    element.send_keys(" ")
+    time.sleep(random.uniform(0.1, 0.4))
+    element.send_keys('|#')
+    time.sleep(random.uniform(0.1, 0.4))
+    for i in data:
+        element.send_keys(i)
+        time.sleep(random.uniform(0.1, 0.4))
+    time.sleep(1)
+    element.send_keys(" ")
 
 def login(driver):
     send_keys(WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Email or username']"))), USERNAME)
@@ -39,13 +48,17 @@ def televerser(driver, path_video):
     WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]'))).send_keys(path_video)
 
 def title_and_hashtag(driver, title, hashtag):
+    first_letter = title[0]
+    rest_letter = title[1:]
     time.sleep(2)
     br = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//br[@data-text="true"]')))
     time.sleep(1)
-    send_keys(br, title[:1])
+    send_keys(br, first_letter)
     time.sleep(1)
     span = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//span[@data-text="true"]')))
-    send_keys(span, title[1:])
+    send_keys(span, rest_letter)
+    if hashtag:
+        send_hashtag(span, hashtag)
 
 def post_button(driver, basename):
     time.sleep(2)
@@ -65,7 +78,7 @@ def post_button(driver, basename):
             time.sleep(5)
     while True:
         try:
-            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//div[@class="tiktok-modal__modal-mask"]')))
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//div[@class="tiktok-modal__modal-title"]')))
             print("video is uploaded !")
             break
         except:
