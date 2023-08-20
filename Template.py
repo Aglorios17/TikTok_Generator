@@ -28,8 +28,8 @@ def background_txt_color():
         (0, 255, 255),  # Cyan
         (128, 0, 128),  # Purple
         (255, 165, 0),  # Orange
-        (0, 128, 0),    # Dark Green
-        (128, 128, 128) # Gray
+        (0, 128, 0)    # Dark Green
+        #(128, 128, 128) # Gray
     ]
 
     # Choose a random RGB color
@@ -54,13 +54,16 @@ def make_frame(t):
     frame = (background_color * np.ones((height, width, 3))).astype('uint8')  # White background
     return frame
 
-def Template(path, path2, comment):
+def Template(finished_path, path, path2, start_clip, end_clip,comment):
+    
+    
     background_txt_color_value = background_txt_color()
     # create list with all video data
     data_info = []
     
     # create directory to store video
-    new_directory, file_extension = os.path.splitext(path)
+    directory_path_to_create = os.path.join(finished_path, path)
+    new_directory, file_extension = os.path.splitext(directory_path_to_create)
     filename = os.path.basename(path)
     basename, basename_extension = os.path.splitext(filename)
 
@@ -68,10 +71,14 @@ def Template(path, path2, comment):
         os.mkdir(new_directory)
     
     # Define the path to the new folder
-    new_folder_path = os.path.join(os.getcwd(), new_directory)
+    new_folder_path = new_directory#os.path.join(os.getcwd(), new_directory)
     
     # Load the original video
-    original_video = VideoFileClip(path)
+    if (end_clip != "0"):
+        no_cut_video  = VideoFileClip(path)
+        original_video = no_cut_video.subclip(start_clip, end_clip)
+    else:
+        original_video  = VideoFileClip(path)
     original_second_video = VideoFileClip(path2)
     
     # Calculate the total number of parts
@@ -173,7 +180,10 @@ def Template(path, path2, comment):
         # Write each text element from the list to the file
         for item in data_info:
             file.write(item + "\n")
-    
-#for i in range(1, len(sys.argv)):
-Template(sys.argv[1], sys.argv[2], sys.argv[3])
-#    i += 1
+
+def main():
+    complete_video_path = os.path.join(os.getcwd(), "./videos")
+    Template(complete_video_path, sys.argv[1], sys.argv[2], 0,0, sys.argv[3])
+
+if __name__ == "__main__":
+    main()

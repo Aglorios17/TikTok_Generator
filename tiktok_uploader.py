@@ -120,5 +120,9 @@ def uploader(path_video, title, hashtag):
     driver.quit()
 
 # video / titre / hashtag
-     
-uploader(sys.argv[1], sys.argv[2], sys.argv[3])
+def main():
+    uploader(sys.argv[1], sys.argv[2], sys.argv[3])
+
+if __name__ == "__main__":
+    main()
+  
