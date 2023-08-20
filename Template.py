@@ -2,12 +2,14 @@ import os
 import random
 from moviepy.editor import CompositeVideoClip, VideoFileClip, VideoClip, TextClip, clips_array, ColorClip
 from moviepy.editor import *
+from moviepy.config import change_settings
 import scipy.ndimage
 import shutil
 import numpy as np
 import sys
 import cv2
 
+change_settings({"IMAGEMAGICK_BINARY": r"C:\\Program Files\\ImageMagick-7.1.1-Q16-HDRI\\magick.exe"})
 # Set the dimensions for a TikTok video (vertical orientation)
 width = 1080 # width remains constant
 height = 1920  # height for 9:16 aspect ratio
@@ -53,7 +55,7 @@ def make_frame(t):
     return frame
 
 def Template(path, path2, comment):
-    background_txt_color = background_txt_color()
+    background_txt_color_value = background_txt_color()
     # create list with all video data
     data_info = []
     
@@ -120,7 +122,7 @@ def Template(path, path2, comment):
         
         color_clip = ColorClip(
                         size=(int(image_width*1.1), int(image_height*1.4)),
-                        color=background_txt_color
+                        color=background_txt_color_value
                     )
         color_clip = color_clip#.set_opacity(.5)
         
