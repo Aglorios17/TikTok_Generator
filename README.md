@@ -24,7 +24,7 @@ python3 ytb_download.py /path/to/LINK
 ```
 ## Create the template and cut in part
 ```
-python3 Template.py /path/to/Principal_video /path/to/Second_video "Comment" 
+python3 Template.py /path/to/Principal_video /path/to/Second_video time_code_start time_code_end "Comment" 
 ```
 ## Upload video to tiktok
 ```
