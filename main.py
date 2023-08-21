@@ -7,6 +7,7 @@ import random
 import ytb_download
 import Template
 import tiktok_uploader
+from unidecode import unidecode
 
 video_stock = "./base_video"
 video_background_stock = "./background_videos"
@@ -59,9 +60,9 @@ def parsed_csv(path):
                 url=row[0],
                 start_time=row[1],
                 end_time=row[2],
-                description=row[3],
-                hashtag=row[4],
-                message=row[5]
+                description=unidecode(row[3]),
+                hashtag=unidecode(row[4]),
+                message=unidecode(row[5])
             ))
     return(entry_list)
 
