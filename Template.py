@@ -56,22 +56,25 @@ def make_frame(t):
 
 def Template(finished_path, path, path2, start_clip, end_clip,comment):
     
-    
+    #print(finished_path)
+    #print(path)
+    #print(path2)
     background_txt_color_value = background_txt_color()
     # create list with all video data
     data_info = []
     
     # create directory to store video
-    directory_path_to_create = os.path.join(finished_path, path)
-    new_directory, file_extension = os.path.splitext(directory_path_to_create)
+    new_directory, file_extension = os.path.splitext(path)
     filename = os.path.basename(path)
     basename, basename_extension = os.path.splitext(filename)
-
-    if not os.path.exists(new_directory):
-        os.mkdir(new_directory)
+    if not os.path.exists(finished_path):
+        os.mkdir(finished_path)
+    new_directory_create = os.path.join(finished_path, basename)
+    if not os.path.exists(new_directory_create):
+        os.mkdir(new_directory_create)
     
     # Define the path to the new folder
-    new_folder_path = new_directory#os.path.join(os.getcwd(), new_directory)
+    new_folder_path = new_directory_create
     
     # Load the original video
     if (end_clip != "0"):
@@ -175,7 +178,7 @@ def Template(finished_path, path, path2, start_clip, end_clip,comment):
         os.remove("tiktok_frame.mp4")
 
     # Open the file for writing
-    data_path = os.path.join(new_folder_path, basename + ".txt")
+    data_path = os.path.join(finished_path, "new_"+ basename + ".txt")
     with open(data_path, "w") as file:
         # Write each text element from the list to the file
         for item in data_info:

@@ -58,7 +58,9 @@ def title_and_hashtag(driver, title, hashtag):
     span = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//span[@data-text="true"]')))
     send_keys(span, rest_letter)
     if hashtag:
-        send_hashtag(span, hashtag)
+        list_hashtag = hashtag.split(" ")
+        for word in list_hashtag:
+            send_hashtag(span, word)
 
 def post_button(driver, basename):
     time.sleep(2)
@@ -93,7 +95,7 @@ def uploader(path_video, title, hashtag):
         print("driver exist")
     
     # absolut path
-    path_video = os.path.join(os.getcwd(), path_video)
+    #path_video = os.path.join(os.getcwd(), path_video)
     # Options
     option = webdriver.ChromeOptions()
     option.add_argument("--profile-directory=Default")
