@@ -20,15 +20,15 @@ COOKIE_PATH = "e:/aless/AppData/chrome/"
 def send_keys(element, data):
     for i in data:
         element.send_keys(i)
-        time.sleep(random.uniform(0.1, 0.4))
+        time.sleep(random.uniform(0.0, 0.2))
         
 def send_hashtag(element, data):
-    time.sleep(random.uniform(0.1, 0.4))
+    time.sleep(random.uniform(0.1, 0.3))
     element.send_keys('.#')
-    time.sleep(random.uniform(0.1, 0.4))
+    time.sleep(random.uniform(0.1, 0.2))
     for i in data:
         element.send_keys(i)
-        time.sleep(random.uniform(0.1, 0.4))
+        time.sleep(random.uniform(0.1, 0.3))
     time.sleep(1)
     element.send_keys(" ")
 
@@ -40,12 +40,21 @@ def login(driver):
     WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//button[@type='submit']"))).click()
 
 def televerser(driver, path_video):
-    time.sleep(6)
-    driver.get("https://www.tiktok.com/creator#/upload?scene=creator_center")
-    time.sleep(2)
-    print(path_video)
-    clean_path = path_video.replace("\n", "")
-    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]'))).send_keys(clean_path)
+    #i = 0
+    #while True:
+        #try:
+     #       if i == 4:
+     #           break
+     #       i += 1
+            time.sleep(6)
+            driver.get("https://www.tiktok.com/creator#/upload?scene=creator_center")
+            time.sleep(3)
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]'))).send_keys(path_video)
+      #      continue
+        #except:
+        #    print("upload file restart")
+    #if i==4:
+    #    print("failed to upload file")
 
 def title_and_hashtag(driver, title, hashtag):
     try:
@@ -69,11 +78,6 @@ def title_and_hashtag(driver, title, hashtag):
 def post_button(driver, basename):
     time.sleep(2)
     print(basename)
-    #if len(basename) > 20:
-    #    checkname = basename[:20]
-    #else:
-    #    checkname = basename
-    #print(checkname)
     while True:
         try:
             WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, f'//div[@title="{basename}"]')))
@@ -104,6 +108,8 @@ def uploader(path_video, title, hashtag):
     if os.path.exists("sources/chromedriver.exe"):
         print("driver exist")
     
+    # Set True if you have any saved cookies
+    auto_login = False
     # absolut path
     #path_video = os.path.join(os.getcwd(), path_video)
     # Options
@@ -120,14 +126,13 @@ def uploader(path_video, title, hashtag):
     driver.get('https://www.tiktok.com/login/phone-or-email/email')
     time.sleep(1)
     # Getting the list of directories
-    dir = os.listdir(COOKIE_PATH)
-    # Checking if the list is empty or not
-    if len(dir) == 0:
+    if auto_login:
         print("try to login")
         login(driver)
-    televerser(driver, path_video)
+    clean_path = path_video.replace("\n", "").strip()
+    print(f'path |{clean_path}|')
+    televerser(driver, clean_path)
     title_and_hashtag(driver, title, hashtag)
-    clean_path = path_video.replace("\n", "")
     post_button(driver, os.path.basename(clean_path))
     # Close the browser window
     driver.quit()

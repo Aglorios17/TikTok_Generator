@@ -11,6 +11,7 @@
 - pip install opencv-python
 - pip install scikit-image
 - pip install python-dotenv
+- pip install unidecode
 
 # How to use
 ## Principal use

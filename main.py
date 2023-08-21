@@ -66,10 +66,11 @@ def parsed_csv(path):
     return(entry_list)
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("Usage: python your_script.py input_file.csv")
         sys.exit(1)
     input_file = sys.argv[1]
+    all_script = sys.argv[2]
     data_list = parsed_csv(input_file)
     
     
@@ -79,7 +80,7 @@ def main():
     
     # Now, you can work with the video_list
     for video in data_list:
-        if True:
+        if all_script == "1":
             print(f"URL: {video.url}")
             video_path = ytb_download.Downloader(video.url, base_video_path)
             # List all files in the directory
