@@ -1,5 +1,5 @@
-# TikTok_Money_Generator
-
+# TikTok_Generator
+/!\/!\/!\ for educational purposes only /!\/!\/!\
 # Install
 - pip install pytube
 - pip install moviepy
