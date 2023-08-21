@@ -23,9 +23,8 @@ def send_keys(element, data):
         time.sleep(random.uniform(0.1, 0.4))
         
 def send_hashtag(element, data):
-    element.send_keys(" ")
     time.sleep(random.uniform(0.1, 0.4))
-    element.send_keys('|#')
+    element.send_keys('.#')
     time.sleep(random.uniform(0.1, 0.4))
     for i in data:
         element.send_keys(i)
@@ -45,31 +44,42 @@ def televerser(driver, path_video):
     driver.get("https://www.tiktok.com/creator#/upload?scene=creator_center")
     time.sleep(2)
     print(path_video)
-    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]'))).send_keys(path_video)
+    clean_path = path_video.replace("\n", "")
+    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]'))).send_keys(clean_path)
 
 def title_and_hashtag(driver, title, hashtag):
-    first_letter = title[0]
-    rest_letter = title[1:]
-    time.sleep(2)
-    br = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//br[@data-text="true"]')))
-    time.sleep(1)
-    send_keys(br, first_letter)
-    time.sleep(1)
-    span = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//span[@data-text="true"]')))
-    send_keys(span, rest_letter)
-    if hashtag:
-        list_hashtag = hashtag.split(" ")
-        for word in list_hashtag:
-            send_hashtag(span, word)
+    try:
+        first_letter = title[0]
+        rest_letter = title[1:]
+        time.sleep(2)
+        br = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//br[@data-text="true"]')))
+        time.sleep(1)
+        send_keys(br, first_letter)
+        time.sleep(1)
+        span = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//span[@data-text="true"]')))
+        send_keys(span, rest_letter)
+        send_keys(span, " ")
+        if hashtag:
+            list_hashtag = hashtag.split(" ")
+            for word in list_hashtag:
+                send_hashtag(span, word)
+    except:
+        print("not enough time to write all text")
 
 def post_button(driver, basename):
     time.sleep(2)
     print(basename)
+    #if len(basename) > 20:
+    #    checkname = basename[:20]
+    #else:
+    #    checkname = basename
+    #print(checkname)
     while True:
         try:
             WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, f'//div[@title="{basename}"]')))
             time.sleep(10)
             buttons = driver.find_elements(By.XPATH, '//button')
+            time.sleep(1)
             if buttons:
                 # Find the last button in the list
                 last_button = buttons[-1]
@@ -101,7 +111,7 @@ def uploader(path_video, title, hashtag):
     option.add_argument("--profile-directory=Default")
     option.add_argument(f"--user-data-dir={COOKIE_PATH}")
     option.add_argument('--disable-blink-features=AutomationControlled')
-    option.add_argument("window-size=1920,1000")
+    option.add_argument("window-size=1920,1400")
     #optional : option.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36")
     
     # Initialize the webdriver (replace 'chromedriver' with the path to your WebDriver)
@@ -117,7 +127,8 @@ def uploader(path_video, title, hashtag):
         login(driver)
     televerser(driver, path_video)
     title_and_hashtag(driver, title, hashtag)
-    post_button(driver, os.path.basename(path_video))
+    clean_path = path_video.replace("\n", "")
+    post_button(driver, os.path.basename(clean_path))
     # Close the browser window
     driver.quit()
 

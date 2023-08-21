@@ -79,21 +79,22 @@ def main():
     
     # Now, you can work with the video_list
     for video in data_list:
-        print(f"URL: {video.url}")
-        video_path = ytb_download.Downloader(video.url, base_video_path)
-        # List all files in the directory
-        all_files = os.listdir(background_video_path)
-        file_list = [f for f in all_files if os.path.isfile(os.path.join(background_video_path, f))]
-        # Check if there are any files in the directory
-        if not file_list:
-            print("No files found in the directory.")
-        else:
-            # Choose a random file from the list
-            random_file = os.path.join(background_video_path,random.choice(file_list))
-        print(random_file)
-        Template.Template(complete_video_path, video_path, random_file, video.start_time, video.end_time, video.message)
-        time.sleep(5)
-        
+        if True:
+            print(f"URL: {video.url}")
+            video_path = ytb_download.Downloader(video.url, base_video_path)
+            # List all files in the directory
+            all_files = os.listdir(background_video_path)
+            file_list = [f for f in all_files if os.path.isfile(os.path.join(background_video_path, f))]
+            # Check if there are any files in the directory
+            if not file_list:
+                print("No files found in the directory.")
+            else:
+                # Choose a random file from the list
+                random_file = os.path.join(background_video_path,random.choice(file_list))
+            print(random_file)
+            Template.Template(complete_video_path, video_path, random_file, video.start_time, video.end_time, video.message)
+            time.sleep(5)
+            
         # Get a list of all text files that start with "new_"
         new_txt_files = get_new_txt_files(complete_video_path)
         if new_txt_files:
@@ -105,6 +106,7 @@ def main():
                         data = line.split("|")
                         print(data)
                         tiktok_uploader.uploader(data[1], data[0], video.hashtag)
+                        time.sleep(2)
             rename_files(complete_video_path)
         else:
             print("No new_txt files found.")
