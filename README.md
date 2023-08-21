@@ -1,7 +1,7 @@
 # TikTok_Generator
 
 > [!WARNING] 
-> for educational purposes only
+> For educational purposes only
 
 # Install
 - pip install pytube
