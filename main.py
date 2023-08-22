@@ -60,9 +60,9 @@ def parsed_csv(path):
                 url=row[0],
                 start_time=row[1],
                 end_time=row[2],
-                description=unidecode(row[3]),
-                hashtag=unidecode(row[4]),
-                message=unidecode(row[5])
+                description=unidecode(row[3]).strip(),
+                hashtag=unidecode(row[4]).strip(),
+                message=unidecode(row[5]).strip()
             ))
     return(entry_list)
 
@@ -99,6 +99,7 @@ def main():
             
         # Get a list of all text files that start with "new_"
         new_txt_files = get_new_txt_files(complete_video_path)
+        succes = False
         if new_txt_files:
             print("Found the following new_txt files:")
             for file in new_txt_files:
@@ -107,9 +108,10 @@ def main():
                     for line in file:
                         data = line.split("|")
                         print(data)
-                        tiktok_uploader.uploader(data[1], data[0], video.hashtag)
+                        success = tiktok_uploader.uploader(data[1], data[0], video.hashtag)
                         time.sleep(2)
-            rename_files(complete_video_path)
+            if succes:
+                rename_files(complete_video_path)
         else:
             print("No new_txt files found.")
 if __name__ == "__main__":

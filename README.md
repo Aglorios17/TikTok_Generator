@@ -42,8 +42,12 @@ python3 tiktok_uploader.py /path/to/video "titre" "hashtag separete by space"
 - pip install selenium
 - https://www.gregbrisebois.com/posts/chromedriver-in-wsl2/
 
+### Option 3
+- https://pypi.org/project/pyppeteer/
+
 # Bug
 - when processing finished before and text input
 - can't use emoji and need to put character before # when input to tiktok
 - need to have enough size screen to click on post button
 - can't use emoji in video editing
+- too many attemps post video
