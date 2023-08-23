@@ -34,6 +34,16 @@ python3 Template.py /path/to/Principal_video /path/to/Second_video time_code_sta
 ```
 python3 tiktok_uploader.py /path/to/video "titre" "hashtag separete by space"
 ```
+
+## Account creation for tiktok
+```
+python3 .\tiktok_account.py
+```
+#### TODO
+- [ ] Get domain
+- [ ] auto check mail
+- [ ] anomyme mail
+
 ### Option 1 (not working)
 - https://pypi.org/project/tiktok-uploader/
 - pip install tiktok-uploader

@@ -68,12 +68,10 @@ def input_date(driver, string, date):
     element.click()
 
 def retreive_code(driver):
-    button = driver.find_elements(By.XPATH, '//button')
-    time.sleep(1)
-    button[-2].click()
-    code = "123456"
-    send_keys(WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Enter 6-digit code']"))), code)
-    time.sleep(random.uniform(0.1, 0.5))
+    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//button[@type='button']"))).send_keys("\n")
+    #code = "123456"
+    #send_keys(WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Enter 6-digit code']"))), code)
+    #time.sleep(random.uniform(0.1, 0.5))
 
 def input_data(driver, date, mail, password):
     # select month
@@ -89,7 +87,7 @@ def input_data(driver, date, mail, password):
     # send code
     retreive_code(driver)
     # Next button
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//button[@type='submit']"))).click()
+    #WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//button[@type='submit']"))).click()
 
 def new_account():
     # Set True if you have any saved cookies
