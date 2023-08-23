@@ -46,14 +46,12 @@ def televerser(driver, path_video):
     WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]'))).send_keys(path_video)
 
 def title_and_hashtag(driver, title, hashtag):
+    time.sleep(0.5)
     try:
         first_letter = title[0]
         rest_letter = title[1:]
-        time.sleep(0.5)
         br = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//br[@data-text="true"]')))
-        time.sleep(0.5)
         send_keys(br, first_letter)
-        time.sleep(0.5)
         span = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//span[@data-text="true"]')))
         send_keys(span, rest_letter)
         send_keys(span, " ")
@@ -108,6 +106,7 @@ def delete_log():
             os.remove(f"./log/capture{i}.png")           
 
 def uploader(path_video, title, hashtag):
+    print(f'{path_video} | {title} | {hashtag}')
     if os.path.exists("sources/chromedriver.exe"):
         print("driver exist")
     
@@ -118,6 +117,7 @@ def uploader(path_video, title, hashtag):
     option.add_argument("--disable-gpu")
     option.add_argument("--profile-directory=Default")
     option.add_argument("--ignore-certificate-errors")
+    option.add_argument("--log-level=3")
     option.add_argument(f"--user-data-dir={COOKIE_PATH}")
     option.add_argument('--disable-blink-features=AutomationControlled')
     option.add_argument("window-size=1920,1400")
