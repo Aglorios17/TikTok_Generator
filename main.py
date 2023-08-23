@@ -109,6 +109,9 @@ def main():
                         data = line.split("|")
                         print(data)
                         success = tiktok_uploader.uploader(data[1], data[0], video.hashtag)
+                        if not succes:
+                            print("script failed")
+                            break
                         time.sleep(2)
             if succes:
                 rename_files(complete_video_path)

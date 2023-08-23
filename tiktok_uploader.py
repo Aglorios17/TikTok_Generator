@@ -84,7 +84,7 @@ def post_button(driver, basename):
         except:
             if too_many_try == 15:
                 print("failed to load")
-                return False
+                return 0
             print("video is loading")
             too_many_try += 1
     too_many_try = 0
@@ -92,11 +92,11 @@ def post_button(driver, basename):
         try:
             WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//div[@class="tiktok-modal__modal-title"]')))
             print("video is uploaded !")
-            return True
+            return 1
         except:
             if too_many_try == 5:
                 print("too many try => tiktok blocked upload")
-                return False
+                return 0
             print("video is uploading")
             time.sleep(5)
             too_many_try += 1
@@ -144,10 +144,10 @@ def uploader(path_video, title, hashtag):
         delete_log()
     else:
         driver.get_screenshot_as_file("./log/capture4.png")
-        return False
+        return 0
     # Close the browser window
     driver.quit()
-    return True
+    return 1
 
 # video / titre / hashtag
 def main():

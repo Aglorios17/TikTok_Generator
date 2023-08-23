@@ -51,3 +51,4 @@ python3 tiktok_uploader.py /path/to/video "titre" "hashtag separete by space"
 - need to have enough size screen to click on post button
 - can't use emoji in video editing
 - too many attemps post video
+- create function to rewrite file if something failed between two uplaod
