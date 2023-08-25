@@ -40,7 +40,7 @@ def random_date():
     current_date = datetime.now()
 
     # Calculate the maximum and minimum birth dates
-    min_birth_date = current_date - timedelta(days=365 * 40)  # 100 years ago
+    min_birth_date = current_date - timedelta(days=365 * 40)  # 40 years ago
     max_birth_date = current_date - timedelta(days=365 * 21)   # 21 years ago
 
     # Generate a random birth date within the specified range

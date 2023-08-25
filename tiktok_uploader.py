@@ -82,7 +82,7 @@ def post_button(driver, basename):
         except:
             if too_many_try == 15:
                 print("failed to load")
-                return 0
+                return None
             print("video is loading")
             too_many_try += 1
     too_many_try = 0
@@ -94,7 +94,7 @@ def post_button(driver, basename):
         except:
             if too_many_try == 5:
                 print("too many try => tiktok blocked upload")
-                return 0
+                return None
             print("video is uploading")
             time.sleep(5)
             too_many_try += 1
@@ -144,7 +144,7 @@ def uploader(path_video, title, hashtag):
         delete_log()
     else:
         driver.get_screenshot_as_file("./log/capture4.png")
-        return 0
+        return None
     # Close the browser window
     driver.quit()
     return 1

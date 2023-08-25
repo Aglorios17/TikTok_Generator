@@ -54,6 +54,9 @@ python3 .\tiktok_account.py
 - [ ] auto check mail
 - [ ] anomyme mail
 
+# IDEA
+- Create App to call flask api with in my script
+
 # Bug
 - when processing finished before and text input
 - can't use emoji and need to put character before # when input to tiktok
