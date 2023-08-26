@@ -183,6 +183,7 @@ def Template(finished_path, path, path2, start_clip, end_clip,comment):
         # Write each text element from the list to the file
         for item in data_info:
             file.write(item + "\n")
+    return 1
 
 def main():
     complete_video_path = os.path.join(os.getcwd(), "./videos")

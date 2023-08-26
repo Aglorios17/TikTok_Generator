@@ -87,18 +87,20 @@ def send_to_template(video, all_script, base_video_path, background_video_path, 
     if all_script == "1":
             print(f"URL: {video.url}")
             video_path = ytb_download.Downloader(video.url, base_video_path)
+            if video_path is None:
+                return None
             # List all files in the directory
             all_files = os.listdir(background_video_path)
             file_list = [f for f in all_files if os.path.isfile(os.path.join(background_video_path, f))]
             # Check if there are any files in the directory
-            if not file_list:
+            if file_list is None:
                 print("No files found in the directory.")
                 return None
             else:
                 # Choose a random file from the list
                 random_file = os.path.join(background_video_path,random.choice(file_list))
             print(random_file)
-            if not Template.Template(complete_video_path, video_path, random_file, video.start_time, video.end_time, video.message):
+            if Template.Template(complete_video_path, video_path, random_file, video.start_time, video.end_time, video.message) is None:
                 return None
             time.sleep(5)
     return 1
@@ -116,7 +118,7 @@ def send_to_tiktok(complete_video_path, video):
                     data = line.split("|")
                     print(data)
                     success = tiktok_uploader.uploader(data[1], data[0], video.hashtag)
-                    if not succes:
+                    if succes is None:
                         new_file_failed(index ,file)
                         return None
                     index += 1
@@ -126,6 +128,7 @@ def send_to_tiktok(complete_video_path, video):
     else:
         print("No new_txt files found.")
         return None
+    return 1
 
 def main():
     if len(sys.argv) != 3:
@@ -142,11 +145,11 @@ def main():
     
     # Now, you can work with the video_list
     for video in data_list:        
-        if not send_to_template(video, all_script, base_video_path, background_video_path, complete_video_path):
+        if send_to_template(video, all_script, base_video_path, background_video_path, complete_video_path) is None:
             print("Template error")
             return None
         # Get a list of all text files that start with "new_"
-        if not send_to_tiktok(complete_video_path, video):
+        if send_to_tiktok(complete_video_path, video) is None:
             print("Send to Tiktok error")
             return None
 

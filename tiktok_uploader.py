@@ -114,7 +114,7 @@ def uploader(path_video, title, hashtag):
     auto_login = False
     option = webdriver.ChromeOptions()
     option.add_argument("--headless")
-    option.add_argument("--disable-gpu")
+    #option.add_argument("--disable-gpu")
     option.add_argument("--profile-directory=Default")
     option.add_argument("--ignore-certificate-errors")
     option.add_argument("--log-level=3")
@@ -127,7 +127,7 @@ def uploader(path_video, title, hashtag):
     driver = webdriver.Chrome(options=option)
     #Open a webpage
     driver.get('https://www.tiktok.com/login/phone-or-email/email')
-    time.sleep(1)
+    time.sleep(3)
     # Getting the list of directories
     if auto_login:
         print("Login page credentials")

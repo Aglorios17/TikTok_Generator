@@ -191,4 +191,7 @@ pyrightconfig.json
 *.wmv
 *.webm
 
+# video 
+/videos
+
 # End of https://www.toptal.com/developers/gitignore/api/python,video
