@@ -19,9 +19,9 @@
 python3 main.py entry.csv
 ```
 ### csv
-| Link | time_code_start | time_code_end | description | Hashtag | on screen message
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| http from ytb  | 0 (not tested)  | 0 (not tested)  | "not actual in use"  | "separate by space"  | "max 25 characters"  |
+| Link | time_code_start | time_code_end | Hashtag | on screen message
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| http from ytb  | 0 (not tested)  | 0 (not tested)  | "separate by space"  | "max 25 characters"  |
 ## Download video
 ```
 python3 ytb_download.py /path/to/LINK
@@ -52,15 +52,17 @@ python3 .\tiktok_account.py
 ### TODO
 - [ ] Get domain
 - [ ] auto check mail
-- [ ] anomyme mail
+- [ ] Tutanota / ProtonMail / mailfence
 
 # IDEA
 - Create App to call flask api with in my script
+- pov smartphone
 
 # Bug
-- when processing finished before and text input
-- can't use emoji and need to put character before # when input to tiktok
-- need to have enough size screen to click on post button
-- can't use emoji in video editing
-- too many attemps post video
-- create function to rewrite file if something failed between two uplaod
+- [x] can't write multiple line on video
+- [ ] when processing finished before and text input
+- [ ] can't use emoji and need to put character before # when input to tiktok
+- [x] need to have enough size screen to click on post button
+- [ ] can't use emoji in video editing
+- [x] too many attemps post video
+- [x] create function to rewrite file if something failed between two uplaod

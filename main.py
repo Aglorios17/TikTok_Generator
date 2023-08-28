@@ -18,7 +18,7 @@ class YouTubeVideo:
     url: str
     start_time: int
     end_time: int
-    description: str
+    channel: str
     hashtag: str
     message: str
 
@@ -48,6 +48,22 @@ def rename_files(directory):
             os.rename(old_file_path, new_file_path)
             print(f"Renamed: {old_file_path} -> {new_file_path}")
 
+def get_channel(url):
+    # Input string
+    # Split the string by '=' from the right, with a maximum of 1 split
+    parts = url.rsplit('=', 1)
+
+    # Check if there was a '=' in the string
+    if len(parts) > 1:
+        # The text after the last '=' is in parts[1]
+        result = parts[1]
+    else:
+        # There was no '=', so result is the original string
+        result = ""
+
+    # Print the result
+    return result.strip()
+
 def parsed_csv(path):
     print("Parsing CSV")
     entry_list = []
@@ -58,11 +74,11 @@ def parsed_csv(path):
             row = line.split("|")
             entry_list.append(YouTubeVideo(
                 url=row[0],
+                channel=f"credits : {get_channel(row[0])}",
                 start_time=row[1],
                 end_time=row[2],
-                description=unidecode(row[3]).strip(),
-                hashtag=unidecode(row[4]).strip(),
-                message=unidecode(row[5]).strip()
+                hashtag=unidecode(row[3]).strip(),
+                message=unidecode(row[4]).strip()
             ))
     return(entry_list)
 
@@ -84,7 +100,7 @@ def new_file_failed(index, path):
         print("File has failed rewritten.")
 
 def send_to_template(video, all_script, base_video_path, background_video_path, complete_video_path):
-    if all_script == "1":
+    if all_script == "1" or all_script == "2":
             print(f"URL: {video.url}")
             video_path = ytb_download.Downloader(video.url, base_video_path)
             if video_path is None:
@@ -117,13 +133,13 @@ def send_to_tiktok(complete_video_path, video):
                 for line in file:
                     data = line.split("|")
                     print(data)
-                    success = tiktok_uploader.uploader(data[1], data[0], video.hashtag)
+                    success = tiktok_uploader.uploader(data[1], data[0], video.hashtag, video.channel)
                     if succes is None:
                         new_file_failed(index ,file)
                         return None
                     index += 1
                     time.sleep(1)
-        if succes:
+        if succes is not None:
             rename_files(complete_video_path)
     else:
         print("No new_txt files found.")
@@ -149,7 +165,7 @@ def main():
             print("Template error")
             return None
         # Get a list of all text files that start with "new_"
-        if send_to_tiktok(complete_video_path, video) is None:
+        if all_script != "2" and send_to_tiktok(complete_video_path, video) is None:
             print("Send to Tiktok error")
             return None
 

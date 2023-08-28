@@ -8,6 +8,7 @@ import shutil
 import numpy as np
 import sys
 import cv2
+import textwrap
 
 change_settings({"IMAGEMAGICK_BINARY": r"C:\\Program Files\\ImageMagick-7.1.1-Q16-HDRI\\magick.exe"})
 # Set the dimensions for a TikTok video (vertical orientation)
@@ -15,7 +16,8 @@ width = 1080 # width remains constant
 height = 1920  # height for 9:16 aspect ratio
 time_clip = 65
 background_color = [220, 220, 220]
-max_line_length = 26
+max_line_length = 24
+fontsize = 64
 
 def background_txt_color():
     # Define an array of RGB color values
@@ -48,11 +50,60 @@ def blur(image):
     
     return blurred_image
 
+def split_text(text, max_line_length):
+    # Use textwrap to split the text into lines without cutting words
+    wrapped_text = textwrap.fill(text, width=max_line_length)
+
+    # Split the wrapped text into a list of lines
+    lines = wrapped_text.split('\n')
+
+    return lines
 
 # Create a function to generate the frame
 def make_frame(t):
     frame = (background_color * np.ones((height, width, 3))).astype('uint8')  # White background
     return frame
+
+def clip_text_generator(part_index, comment, background_txt_color_value, first):
+# Create a list of TextClip objects for each line
+    if first == 1:
+        text = f"Part {part_index + 1} - {comment}"
+    else:
+        text = f"{comment}"
+    txt_clip = TextClip(
+        txt=text,
+        fontsize = fontsize,
+        font= 'Roboto-Bold',
+        color = 'black'
+        )
+    txt_clip = txt_clip.set_position('center')
+    
+    image_width, image_height = txt_clip.size
+    
+    color_clip = ColorClip(
+                    size=(int(image_width*1.1), int((image_height)*1.4)),
+                    color=background_txt_color_value
+                )
+    color_clip = color_clip#.set_opacity(.5)
+    clip_to_overlay = CompositeVideoClip([color_clip, txt_clip])
+    return clip_to_overlay
+
+def calculate_positions(comment_lines, fontsize):
+    num_lines = len(comment_lines)
+    total_height = num_lines * fontsize  # Total height of all text lines
+    
+    # Calculate the vertical spacing between lines
+    spacing = total_height / (num_lines)
+    
+    # Calculate positions for each line, starting from the top
+    positions = []
+    y_position = spacing  # Start from the first position after the top margin
+    
+    for _ in range(num_lines):
+        positions.append(("center", y_position))
+        y_position += fontsize + spacing  # Move to the next position
+        
+    return positions
 
 def Template(finished_path, path, path2, start_clip, end_clip,comment):
     
@@ -116,28 +167,20 @@ def Template(finished_path, path, path2, start_clip, end_clip,comment):
         tiktok_frame_clip = tiktok_frame_clip.set_position(("center", "center"))  # Center vertically
 
         # Generate a text clip
-        
         # Split the long text into multiple lines
-        lines = [comment[i:i+max_line_length] for i in range(0, len(comment), max_line_length)]
-        # Create a list of TextClip objects for each line
-        txt_clip = TextClip(
-            txt=f"Part {part_index + 1} - {comment}",
-            fontsize = 64,
-            font= 'Roboto-Bold',
-            color = 'black'
-            )
-        txt_clip = txt_clip.set_position('center')
+        lines = split_text(comment, max_line_length)
+        print(lines)
         
-        image_width, image_height = txt_clip.size
-        
-        color_clip = ColorClip(
-                        size=(int(image_width*1.1), int(image_height*1.4)),
-                        color=background_txt_color_value
-                    )
-        color_clip = color_clip#.set_opacity(.5)
-        
-        
-        clip_to_overlay = CompositeVideoClip([color_clip, txt_clip])
+        # calcul pos
+        positions = calculate_positions(lines, fontsize)
+        # Create a transparent ColorClip
+        transparent_clip = ColorClip(size=(width, height), color=(0, 0, 0, 0))
+        print(positions)
+        clip_to_overlay = clip_text_generator(part_index, lines[0], background_txt_color_value, 1).set_position(positions[0])
+        clip_to_overlay = CompositeVideoClip([transparent_clip, clip_to_overlay])
+        for i in range(1, len(lines)):
+            clip_txt = clip_text_generator(part_index, lines[i], background_txt_color_value, 0).set_position(positions[i])
+            clip_to_overlay = CompositeVideoClip([clip_to_overlay, clip_txt])
         clip_to_overlay = clip_to_overlay.set_position(('center', 0.6), relative=True).set_duration(resized_video.duration)
         # setting position of text in the center and duration will be 10 seconds
         
@@ -167,7 +210,7 @@ def Template(finished_path, path, path2, start_clip, end_clip,comment):
         video_with_frame.write_videofile(output_file_path, codec="libx265", fps=original_video.fps)
 
         # add data to data_info
-        data_info.append(f"part {part_index + 1} {basename} | {output_file_path}" )
+        data_info.append(f"part {part_index + 1} {basename} | {output_file_path}")
     # Close the original video clip
     original_video.close()
     cropped_video.close()

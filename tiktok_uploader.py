@@ -45,7 +45,7 @@ def televerser(driver, path_video):
     time.sleep(3)
     WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]'))).send_keys(path_video)
 
-def title_and_hashtag(driver, title, hashtag):
+def title_and_hashtag(driver, title, hashtag, credit):
     time.sleep(0.5)
     try:
         first_letter = title[0]
@@ -54,8 +54,10 @@ def title_and_hashtag(driver, title, hashtag):
         send_keys(br, first_letter)
         span = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//span[@data-text="true"]')))
         send_keys(span, rest_letter)
-        send_keys(span, " ")
+        if credit:
+            send_keys(span, f" {credit}")
         if hashtag:
+            send_keys(span, " ")
             list_hashtag = hashtag.split(" ")
             for word in list_hashtag:
                 send_hashtag(span, word)
@@ -105,7 +107,7 @@ def delete_log():
         if os.path.exists(f"./log/capture{i}.png"):
             os.remove(f"./log/capture{i}.png")           
 
-def uploader(path_video, title, hashtag):
+def uploader(path_video, title, hashtag, credit):
     print(f'{path_video} | {title} | {hashtag}')
     if os.path.exists("sources/chromedriver.exe"):
         print("driver exist")
@@ -137,7 +139,7 @@ def uploader(path_video, title, hashtag):
     driver.get_screenshot_as_file("./log/capture1.png")
     televerser(driver, clean_path)
     driver.get_screenshot_as_file("./log/capture2.png")
-    title_and_hashtag(driver, title, hashtag)
+    title_and_hashtag(driver, title, hashtag, credit)
     driver.get_screenshot_as_file("./log/capture3.png")
     if post_button(driver, os.path.basename(clean_path)):
         print("Upload completed successfully!")
@@ -151,7 +153,7 @@ def uploader(path_video, title, hashtag):
 
 # video / titre / hashtag
 def main():
-    uploader(sys.argv[1], sys.argv[2], sys.argv[3])
+    uploader(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 
 if __name__ == "__main__":
     main()
