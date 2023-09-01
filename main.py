@@ -146,19 +146,12 @@ def send_to_tiktok(complete_video_path, video):
         return None
     return 1
 
-def main():
-    if len(sys.argv) != 3:
-        print("Usage: python your_script.py input_file.csv")
-        sys.exit(1)
-    input_file = sys.argv[1]
-    all_script = sys.argv[2]
+def tiktok_automated(input_file, all_script):
     data_list = parsed_csv(input_file)
-    
-    
+    print("----debug----",data_list, all_script)
     base_video_path = os.path.join(os.getcwd(), video_stock)
     background_video_path = os.path.join(os.getcwd(), video_background_stock)
     complete_video_path = os.path.join(os.getcwd(), modified_video_path)
-    
     # Now, you can work with the video_list
     for video in data_list:        
         if send_to_template(video, all_script, base_video_path, background_video_path, complete_video_path) is None:
@@ -168,6 +161,17 @@ def main():
         if all_script != "2" and send_to_tiktok(complete_video_path, video) is None:
             print("Send to Tiktok error")
             return None
+    return True
+
+def main():
+    if len(sys.argv) != 3:
+        print("Usage: python your_script.py input_file.csv flag(0/1/2)")
+        sys.exit(1)
+    input_file = sys.argv[1]
+    all_script = sys.argv[2]
+    
+    if tiktok_automated(input_file, all_script) is None:
+        return None
 
 if __name__ == "__main__":
     main()   

@@ -22,6 +22,12 @@ python3 main.py entry.csv
 | Link | time_code_start | time_code_end | Hashtag | on screen message
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | http from ytb  | 0 (not tested)  | 0 (not tested)  | "separate by space"  | "max 25 characters"  |
+
+## API
+### TODO API
+- [x] basic function to send data
+- [x] function to upload video
+
 ## Download video
 ```
 python3 ytb_download.py /path/to/LINK
@@ -55,8 +61,8 @@ python3 .\tiktok_account.py
 - [ ] Tutanota / ProtonMail / mailfence
 
 # IDEA
-- Create App to call flask api with in my script
-- pov smartphone
+- [ ] Create App to call flask api with in my script
+- [ ] pov smartphone
 
 # Bug
 - [x] can't write multiple line on video

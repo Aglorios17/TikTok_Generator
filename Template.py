@@ -84,6 +84,10 @@ def clip_text_generator(part_index, comment, background_txt_color_value, first):
                     size=(int(image_width*1.1), int((image_height)*1.4)),
                     color=background_txt_color_value
                 )
+    # Create a mask with rounded corners
+    #mask = ColorClip(size=(int(image_width*1.1), int((image_height)*1.4)), color=background_txt_color_value, ismask=True)
+    #mask = mask.fx(afx.rounded_corners, radius=50)
+    #color_clip = color_clip.fx(afx.composite_video, mask=mask)
     color_clip = color_clip#.set_opacity(.5)
     clip_to_overlay = CompositeVideoClip([color_clip, txt_clip])
     return clip_to_overlay
@@ -101,15 +105,11 @@ def calculate_positions(comment_lines, fontsize):
     
     for _ in range(num_lines):
         positions.append(("center", y_position))
-        y_position += fontsize + spacing  # Move to the next position
+        y_position += fontsize + 20 # Move to the next position
         
     return positions
 
 def Template(finished_path, path, path2, start_clip, end_clip,comment):
-    
-    #print(finished_path)
-    #print(path)
-    #print(path2)
     background_txt_color_value = background_txt_color()
     # create list with all video data
     data_info = []
